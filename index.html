@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spoilboarder</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="js/jquery.js"></script>
+    <div class="container">
+      <!--<h2>Spoilboard Cutter</h2>
+      <p>This app cuts pockets and slots for screws in a new spoilboard.<p>-->
+      <div class="row">
+        <div class="col-sm-5 col-sm-push-7" style="margin-left: auto; margin-right: auto; text-align: center; ">
+          <img src="img/spoilboard.png" style="width:100%"></img>
+        </div>
+        <div class="col-sm-7 col-sm-pull-5">
+          <form class="form-horizontal" id="form-jobs">
+            <div class="form-group">
+              <label for="input-pocket-depth" class="col-sm-3 control-label">Pocket Depth</label>
+              <div class="col-sm-9">
+                <div class="input-group has-success">
+                  <input class="form-control num-input" id="input-pocket-depth" value="0.25">
+                  <span class="input-group-addon">in</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="input-slot-depth" class="col-sm-3 control-label">Slot Depth</label>
+              <div class="col-sm-9">
+                <div class="input-group has-success">
+                  <input class="form-control num-input" id="input-slot-depth" value="0.75">
+                  <span class="input-group-addon">in</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-format" class="col-sm-3 control-label">Format:</label>
+              <div class="col-sm-9">
+              <select class="form-control" id="input-format">
+                <option>SB Desktop</option>
+              </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-format" class="col-sm-3 control-label">From:</label>
+              <div class="col-sm-9">
+              <select class="form-control" id="input-format">
+                <option>Current Location</option>
+                <option>0,0</option>
+              </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-12 has-success" style="text-align: right;">
+                <a class="btn btn-success btn-lg" id="job-go">Make Spoilboard</a>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div> <!-- row -->
+      <script src="js/spoilboard.js"></script>
+      <script type="text/javascript">
+        function validateInput(target) {
+            var f = parseFloat(target.val());
+            if(isNaN(f) || f === undefined) {
+                target.parent().removeClass('has-success');
+                target.parent().addClass('has-error');
+                return null;
+            } else {
+                target.parent().removeClass('has-error');
+                target.parent().addClass('has-success');
+                return f;
+            }
+        }
+        // When the submit button is pressed, validate the inputs and submit the job. (if valid)
+        $("#job-go").click(function(evt) {
+            var pocketDepth = validateInput($("#input-pocket-depth"));
+            var slotDepth = validateInput($("#input-slot-depth"));
+            var format = $("#input-format").val();
+            locations = getLocations(format);
+            code = generateGCode(locations, {'slotDepth':slotDepth, 'pocketDepth':pocketDepth});
+            fabmoDashboard.submitJob(code, {filename : 'spoilboard.g'});
+            evt.preventDefault();
+        });
+      </script>
+    </div><!-- container -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+          // Trigger a validation every time an input value changes
+          $(".num-input").change(function(evt) {
+              validateInput($(evt.target));
+          });
+        });
+    </script>
+  </body>
+</html>
